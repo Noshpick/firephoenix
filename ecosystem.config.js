@@ -3,6 +3,7 @@ module.exports = {
     {
       name: 'firephoenix-api',
       cwd: './server',
+      interpreter: 'bun',
       script: 'dist/main.js',
       instances: 2,
       exec_mode: 'cluster',
@@ -24,6 +25,7 @@ module.exports = {
     {
       name: 'firephoenix-client',
       cwd: './client',
+      interpreter: 'bun',
       script: './node_modules/next/dist/bin/next',
       args: 'start -p 3001',
       instances: 2,
