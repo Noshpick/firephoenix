@@ -1,0 +1,105 @@
+# Nginx конфигурация для firephoenix.school (ФИНАЛЬНАЯ - после получения SSL)
+# Файл: /etc/nginx/sites-available/firephoenix.school
+#
+# ИНСТРУКЦИЯ:
+# Используйте этот файл ПОСЛЕ того, как получите SSL сертификат через Certbot
+
+# HTTP сервер - редирект на HTTPS
+server {
+    listen 80;
+    listen [::]:80;
+    server_name firephoenix.school www.firephoenix.school;
+
+    # Для обновления SSL сертификата через Certbot
+    location /.well-known/acme-challenge/ {
+        root /var/www/html;
+    }
+
+    # Редирект всего остального на HTTPS
+    location / {
+        return 301 https://$host$request_uri;
+    }
+}
+
+# HTTPS сервер
+server {
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;
+    server_name firephoenix.school www.firephoenix.school;
+
+    # SSL сертификаты (добавлены автоматически через Certbot)
+    ssl_certificate /etc/letsencrypt/live/firephoenix.school/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/firephoenix.school/privkey.pem;
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+
+    # Ограничение размера загружаемых файлов (для загрузки изображений)
+    client_max_body_size 100M;
+
+    # Таймауты
+    proxy_connect_timeout 60s;
+    proxy_send_timeout 60s;
+    proxy_read_timeout 60s;
+
+    # Логи
+    access_log /var/log/nginx/firephoenix-access.log;
+    error_log /var/log/nginx/firephoenix-error.log;
+
+    # API сервер (NestJS на порту 3000)
+    location /api/ {
+        proxy_pass http://localhost:3000/api/;
+        proxy_http_version 1.1;
+
+        # WebSocket поддержка
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+
+        # Заголовки
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+
+        proxy_cache_bypass $http_upgrade;
+    }
+
+    # Next.js статические файлы с кэшированием
+    location /_next/static/ {
+        proxy_pass http://localhost:3001/_next/static/;
+        proxy_http_version 1.1;
+
+        # Агрессивное кэширование для статических файлов Next.js
+        proxy_cache_valid 200 365d;
+        add_header Cache-Control "public, immutable";
+
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    # Next.js приложение (клиент на порту 3001)
+    location / {
+        proxy_pass http://localhost:3001;
+        proxy_http_version 1.1;
+
+        # WebSocket поддержка для Hot Reload (хотя в продакшене не нужно)
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+
+        # Заголовки
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+
+        proxy_cache_bypass $http_upgrade;
+    }
+
+    # Gzip сжатие
+    gzip on;
+    gzip_vary on;
+    gzip_proxied any;
+    gzip_comp_level 6;
+    gzip_types text/plain text/css text/xml text/javascript application/json application/javascript application/xml+rss application/rss+xml font/truetype font/opentype application/vnd.ms-fontobject image/svg+xml;
+}
