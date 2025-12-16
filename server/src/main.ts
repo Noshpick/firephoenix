@@ -29,9 +29,9 @@ async function bootstrap() {
     }),
   );
 
-  await app.listen(Number(process.env.PORT) || 3000);
+  app.setGlobalPrefix('api');
 
-  app.setGlobalPrefix('api')
+  await app.listen(Number(process.env.PORT) || 3000);
 }
 
 bootstrap();
