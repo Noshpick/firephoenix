@@ -32,16 +32,24 @@ export default function Teachers() {
         </span>
       </div>
 
-      <div className="flex flex-row max-[950px]:flex-col items-center justify-center gap-6 mt-[40px] z-10">
+      <div className="flex flex-col items-center justify-center gap-6 mt-[40px] z-10 min-[950px]:grid min-[950px]:grid-cols-2 min-[1330px]:grid-cols-3 min-[950px]:justify-items-center">
         {teachers.map((teacher: Teacher, index: number) => (
-          <CardTeacher 
+          <div
             key={index}
-            name={teacher.name}
-            image={teacher.image}
-            education={teacher.education}
-            experience={teacher.experience}
-            additional={teacher.additional}
-          />
+            className={`flex justify-center w-full ${
+              index === teachers.length - 1
+                ? "min-[950px]:col-span-2 min-[950px]:justify-self-center min-[1330px]:col-span-1"
+                : ""
+            }`}
+          >
+            <CardTeacher
+              name={teacher.name}
+              image={teacher.image}
+              education={teacher.education}
+              experience={teacher.experience}
+              additional={teacher.additional}
+            />
+          </div>
         ))}
       </div>
 
