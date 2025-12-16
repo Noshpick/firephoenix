@@ -128,7 +128,7 @@ export const en = {
       },
       {
         name: "Anna Savchenko",
-        image: "/anna_savchenko.JPG",
+        image: "/anna_savchenko.jpg",
         education: "Far Eastern Federal University (FEFU), Oriental and African Studies. Master's degree. Training at Shanghai Academy Yin-Yang Wu-Xing (first level)",
         experience: "Managing editor, producer at Russia Today Chinese language broadcasting service. Entrepreneur",
         additional: "Language level: Chinese (HSK 5). Written and oral translation. Organization of cultural events. Interests: traditional Chinese medicine, ba-zi, ancient Chinese treatises.",
