@@ -56,7 +56,7 @@ export default function CardTeacher({
 
         {/* Имя */}
         <div className="text-center">
-          <span className="text-[#62432B] font-[Inter] text-[20px] sm:text-[22px] md:text-[22px] min-[950px]:!text-[18px] lg:text-[20px] min-[1160px]:!text-[22px] not-italic font-semibold leading-tight">
+          <span className="text-[#62432B] font-[Inter] text-[18px] sm:text-[20px] md:text-[20px] min-[950px]:!text-[17px] lg:text-[18px] min-[1160px]:!text-[20px] not-italic font-semibold leading-tight">
             {nameLines.map((line, idx) => (
               <span key={idx}>
                 {line}
@@ -67,7 +67,7 @@ export default function CardTeacher({
         </div>
 
         {/* Текст с информацией */}
-        <div className="flex flex-col items-start w-full max-w-[300px] space-y-1.5 sm:space-y-2.5 text-[#62432B] font-inter text-[9px] sm:text-[11px] md:text-[11px] min-[950px]:!text-[9px] lg:text-[10px] min-[1160px]:!text-[11px] not-italic leading-relaxed overflow-hidden flex-1 min-h-0">
+        <div className="flex flex-col items-start w-full max-w-[260px] sm:max-w-[280px] md:max-w-[280px] min-[950px]:!max-w-[260px] lg:max-w-[270px] min-[1160px]:!max-w-[280px] space-y-1.5 sm:space-y-2.5 text-[#62432B] font-inter text-[8.5px] sm:text-[10px] md:text-[10px] min-[950px]:!text-[8.5px] lg:text-[9px] min-[1160px]:!text-[10px] not-italic leading-relaxed overflow-hidden flex-1 min-h-0 -mt-2 sm:mt-0 ml-3 sm:ml-0">
           <div className="w-full">
             <div className="font-semibold mb-0.5">{t("teachers.educationLabel")}</div>
             <div className="font-normal">{education}</div>
